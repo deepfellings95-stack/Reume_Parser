@@ -1,0 +1,51 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} My App  {% endblock %}</title>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class=" bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Navbar -->
+ {% if current_user.is_authenticated %}
+
+    <nav class="sticky top-0 bg-white shadow-md p-4 dark:bg-gray-800 text-gray-800 dark:text-blue-600 ">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-semibold text-blue-600">Hello {{ current_user.name }}!</h1>
+	    <a href="{{ url_for('auth.logout') }}"><button class=" py-2 mr-2 px-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition" type="button">Logout</button></a>
+        </div>
+    </nav>
+  {% else %}
+    <nav class="sticky top-0 right-0 left-0 bg-white shadow-md p-4 dark:bg-gray-800 text-gray-800 dark:text-blue-600 ">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-semibold text-blue-600">My App</h1>
+	    <div  >
+	    <a href="{{ url_for('auth.loginUser') }}" >
+	    <button class=" py-2 px-4 mr-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition" 
+		type="submit"
+		>Login</button>
+	    </a>
+	    <a href="{{ url_for('auth.signup_user') }}" >
+	    <button class=" py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition" 
+		type="submit" 
+		>SignIn</button>
+	    </a>
+	    </div>
+        </div>
+    </nav>
+  {% endif %}
+    <!-- Main Content -->
+    <main class="container my mx-auto py-8 flex-grow ">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="sticky bottom-0 bg-white shadow-inner p-4 text-center text-sm text-gray-500 dark:bg-gray-800 text-gray-800">
+        © {{ current_year or "2025" }} My App
+    </footer>
+</body>
+</html>
+

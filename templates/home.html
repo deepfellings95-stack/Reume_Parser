@@ -1,0 +1,380 @@
+
+<!-- home.html -->
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
+
+
+{% block content %}
+
+<h2 class="text-3xl font-bold text-center text-slate-800">Resume Parser</h2>
+{% if current_user.is_authenticated %}
+<div class="flex items-center min-h-80 ">
+<div class="max-w-xl mx-auto bg-slate-400 shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-semibold mb-4 text-center text-blue-600">Upload Files</h2>
+
+    <form action="/" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+        <label class="block">
+            <span class="text-cyan-700">Select File</span>
+            <input
+                type="file"
+                name="file"
+                accept=".pdf,.txt,.doc,.docx,image/*"
+                class="mt-1 block w-full border border-gray-300 rounded-lg bg-slate-700 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+            />
+        </label>
+
+        <button
+            type="submit"
+            class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+        >
+            UPLOAD
+        </button>
+	
+
+    </form>
+</div>
+</div>
+<h2 class="text-3xl text-center font-bold mt-4  text-slate-800">ALL Uploads by {{ current_user.name }}</h2>
+{% if posts %}
+{% for post in posts %}
+	<div class="container my-10 bg-slate-400 rounded-lg px-4 py-2">
+		<div class="flex items-center justify-between">
+			<h3 class="inline text-lg font-semibold mb-4 text-zinc-100">{{ post.filename[:100] }}...</h3>
+			<a href="/post_delete/{{post.id}}" class="">
+				<button class="w-24 px-3 py-1 rounded-xl bg-red-500 text-white"> delete</button>
+			</a> 
+		</div>
+		<div class="flex items-center justify-between">
+			<p class="inline">{{ post.text[:100] }}...</p>
+			<a href="/view/{{ post.id}}" class="">
+				<button class="w-24 px-3 py-1 rounded-xl bg-sky-500 text-white">View</button>
+			</a> 
+		</div>
+	</div>
+<hr>
+{% endfor %}
+{% else %}
+<p> NO POST </p>
+{% endif %}
+{% else %}
+	<div><h2 class="text-center text-3xl">Please Login Or Sign In to use the Parser</h2></div>
+<hr class="my-4">
+
+    <div class=" text-gray-800 dark:text-gray-100" >
+
+	<h3 class=" text-center mb-2 text-2xl fontbold">Resume Parsing Web Application – Full Project Description</h3>
+
+<p class=" text-center">The **Resume Parsing Web Application** is a full-stack Flask-based platform designed to accept resumes from users, extract meaningful structured information, and return the results in JSON format. It integrates **OpenRouter**, **DeepSeek**, and **ChatGPT API** to deliver highly accurate analysis of user resumes, providing details such as **skills**, **education**, **experience**, **projects**, **certifications**, **personal details**, and more.</p>
+
+<p class=" text-center">The system includes **user authentication**, **database storage**, **file upload modules**, and **history management**, making it a complete production-ready web application.</p>
+
+<p>---
+
+# 🚀 **1. Project Purpose**---</p>
+
+<p>The goal of the application is to:</p>
+<ul class='mt-2'>
+	<li>* Allow users to **upload resumes** in PDF, DOCX, text, or image formats.</li>
+	<li>* Parse raw content using custom parsers (PyPDF2, python-docx, OCR).</li>
+	<li>* Send extracted raw text to **LLM-based analyzers** via OpenRouter (DeepSeek / ChatGPT).</li>
+	<li>* Generate clean, structured resume metadata:</li>
+</ul>
+<div class=" bg-gray-900 text-gray-100 p-4 rounded-lg overflow-auto max-h-[65vh]  text-sm leading-relaxed mb-4">
+<pre class="whitespace-pre-wrap">
+  ```json
+  {
+    "name": "",
+    "email": "",
+    "phone": "",
+    "education": [],
+    "skills": [],
+    "experience": [],
+    "projects": [],
+    "summary": ""
+  }
+  ```
+</pre>
+</div>
+
+<ul class=''>
+<li>* Store each parsed resume in the database.</li>
+<li>* Allow authenticated users to view their previously parsed results.</li>
+</ul>
+
+
+<p># ⚙️ **2. Technology Stack**</p>
+
+<p>### **Backend**</p>
+
+<ul>
+<li>* **Flask** – Main web framework</li>
+<li>* **Flask-Login** – User authentication</li>
+<li>* **Flask-Migrate + Alembic** – Database migrations</li>
+<li>* **SQLite** (dev mode) – Database</li>
+<li>* **Werkzeug** – Password hashing</li>
+</ul>
+
+<p>### **Frontend**</p>
+<ul>
+<li>* HTML + Jinja2 (templates folder)</li>
+<li>* Bootstrap (optional)</li>
+<li>* Minimal UI for upload, output, login, and signup<\li>
+</ul>
+
+<p>### **Resume Parsing**</p>
+<ul>
+<li>* **PyPDF2** (PDF parsing)</li>
+<li>* **python-docx** (DOCX parsing)</li>
+<li>* **OCR (PIL + pytesseract)** for images</li>
+<li>* **Custom text parser**</li>
+</ul>
+
+<p>### **LLM Integration**</p>
+<ul>
+<li>* **OpenRouter API**</li>
+<li>* Models used:</li>
+
+<li>  * **DeepSeek Chat Model**</li>
+<li>  * **OpenAI ChatGPT**</li>
+<p>* Models convert raw extracted text into structured JSON.</p>
+</ul>
+
+
+
+<p># 🗂️ **3. Project Folder Structure Explained**</p>
+
+<p>Below is what each folder/file in your directory does (based on your provided structure):</p>
+
+<div class=" bg-gray-900 text-gray-100 p-4 rounded-lg overflow-auto max-h-[65vh]  text-sm leading-relaxed mb-4">
+<pre class="whitespace-pre-wrap">
+```
+project_resume_parser/
+│
+├── app.py                     # Main Flask app entry point
+├── config.py                  # Configuration & secret keys
+├── init_database.py           # Initial database setup
+├── .env                       # API keys stored here
+│
+├── auth/
+│   └── routes.py              # User authentication: login, logout, signup
+│
+├── database/
+│   ├── database.py            # SQLAlchemy database instance
+│   └── site.db                # Actual SQLite database
+│
+├── database_models/
+│   ├── models.py              # User model, authentication logic
+│   ├── posts.py               # Resume parsing output storage (posts table)
+│
+├── models/
+│   ├── chatgpt_response.py    # Handling ChatGPT API response formatting
+│   ├── deepseek_response.py   # Handling DeepSeek API response formatting
+│
+├── parsers/
+│   ├── doc_parser.py          # Extract text from DOCX files
+│   ├── image_parser.py        # OCR for image-based resumes
+│   ├── pypdf2_parser.py       # PDF parser using PyPDF2
+│   ├── text_parser.py         # Plain text fallback parser
+│
+├── urls/
+│   ├── routes.py              # Main app routes: upload, parse, results
+│   ├── save_to_database.py    # Database storage helper
+│
+├── templates/
+│   ├── base.html              # Shared layout
+│   ├── home.html              # Home page (upload)
+│   ├── login.html             # Login page
+│   ├── signup.html            # Registration page
+│   ├── result.html            # JSON results display
+│   ├── post.html              # View previous parsed resumes
+│
+├── upload/                    # Temporarily stored uploaded resumes
+├── pdfs/                      # PDF storage (optional)
+└── migrations/                # Alembic migration history
+```
+
+</pre>
+</div>
+
+<p># 🔐 **4. User Authentication Module**</p>
+
+<p>The `auth` package handles complete login system:</p>
+
+<p>### ✔ Signup</p>
+<ul>
+<li>* User provides **email**, **username**, **password**.</li>
+<li>* Password is securely hashed via Werkzeug.</li>
+<li>* New user is stored in `database_models/models.py`.</li>
+</ul>
+<P### ✔ Login</p>
+<ul>
+<li>* User logs in with email + password.</li>
+<li>* Session is created via Flask-Login.</li>
+</ul>
+<p>### ✔ Logout</p>
+<ul>
+<li>* Secure logout route clears active session.</li>
+</ul>
+<p>### ✔ User history</p>
+
+<p>Logged-in users can access past resume results, stored in `posts` table.</p>
+
+
+
+<p># 📥 **5. Resume Upload & Parsing Pipeline**</p>
+
+<p>The upload flow is handled inside `urls/routes.py`.</p>
+
+<p>## **Step 1 — User uploads file**</p>
+
+<p>Accepted formats:</p>
+<ul>
+<li>* `.pdf`</li>
+<li>* `.docx`</li>
+<li>* `.txt`</li>
+<li>* `.jpg`, `.png` (OCR)</li>
+</ul>
+<p>File is stored in:
+
+```
+/upload
+```
+</p>
+<p>
+## **Step 2 — File type is detected**</p>
+<div class=" bg-gray-900 text-gray-100 p-4 rounded-lg overflow-auto max-h-[65vh]  text-sm leading-relaxed mb-4">
+<pre class="whitespace-pre-wrap">
+Flask routes call appropriate parser:
+
+| File Type | Parser Used | Location           |
+| --------- | ----------- | ------------------ |
+| PDF       | PyPDF2      | `pypdf2_parser.py` |
+| DOCX      | python-docx | `doc_parser.py`    |
+| Image     | OCR         | `image_parser.py`  |
+| TXT       | direct      | `text_parser.py`   |
+
+Each parser returns **clean text**.
+
+---
+</pre>
+</div>
+
+<p># 🤖 **6. LLM Processing (DeepSeek & ChatGPT)**</p>
+
+<p>Once raw text is extracted, it is passed to LLM models.</p>
+
+<p>Two modules handle this:</p>
+<div class=" bg-gray-900 text-gray-100 p-4 rounded-lg overflow-auto max-h-[65vh]  text-sm leading-relaxed mb-4">
+<pre class="whitespace-pre-wrap">
+```
+models/chatgpt_response.py
+models/deepseek_response.py
+```
+</pre>
+</div>
+
+<p>## **LLM steps:**</p>
+<ul>
+<li>1. Send extracted text to OpenRouter API.</li>
+<li>2. Request a **structured JSON output** with keys:</li>
+<ul>
+<li>   * name</li>
+<li>   * email</li>
+<li>   * phone</li>
+<li>   * skills</li>
+<li>   * education</li>
+<li>   * experience</li>
+<li>   * certifications</li>
+<li>   * projects</li>
+</ul>
+<li><3. Receive LLM response.</li>
+<li>4. Validate/clean JSON output.</li>
+<li>5. Display to user.</i>
+</ul>
+
+<p># 🗄️ **7. Database Storage**</p>
+
+<p>Parsed results and metadata are saved using:</p>
+
+
+<p>urls/save_to_database.py</p>
+<p>database_models/posts.py</p>
+
+<p>## What is stored:</p>
+<ul>
+<li>* User ID</li>
+<li>* Raw extracted text</li>
+<li>* Parsed result (JSON)</li>
+<li>* Timestamp</li>
+<li>* Filename</li>
+</ul>
+<p>his allows the user to revisit past results.</p>
+
+
+<p># 🧩 **8. Frontend Pages (templates/)**</p>
+
+<p>### 🏠 Home Page (home.html)</p>
+<ul>
+<li>* Upload resume</li>
+<li>* Only visible when logged in</li>
+</ul>
+<p>### 🔑 Login Page (login.html)</p>
+
+<p>### 🆕 Signup Page (signup.html)</p>
+
+<p>### 📑 Parsed Result Page (result.html)</p>
+<ul>
+<li>* Displays JSON output neatly</li>
+</ul>
+<p>### 📚 Previous Results (post.html)</p>
+<ul>
+<li>* Shows list of previously parsed resumes</li>
+</ul>
+<p># 🧵 **9. How the Entire System Works (End-to-End)**</p>
+<ul>
+<li>### 1. User visits platform → signs up or logs in</li>
+
+<li>### 2. User uploads a resume</li>
+
+<li>### 3. File is saved and parsed</li>
+
+<li>### 4. Text extracted is sent to ChatGPT / DeepSeek</li>
+
+<li>### 5. LLM returns structured JSON</li>
+
+<li>### 6. JSON is saved to database</li>
+
+<li>### 7. User sees results on screen</li>
+
+<li>### 8. User can re-open past results anytime</li>
+</ul>
+<p>This architecture makes the app both **modular** and **scalable**.</p>
+<div class=" bg-gray-900 text-gray-100 p-4 rounded-lg overflow-auto max-h-[65vh]  text-sm leading-relaxed mb-4">
+<pre class="whitespace-pre-wrap">
+---
+
+# ⭐ **10. Key Features Summary**
+
+| Feature                         | Description                         |
+| ------------------------------- | ----------------------------------- |
+| Flask-based backend             | Lightweight, secure, easy to scale  |
+| User authentication             | Login/Logout/Signup via Flask-Login |
+| Resume upload                   | PDF, DOCX, TXT, images              |
+| Multi-parser pipeline           | Dedicated parser for each file type |
+| AI-powered resume understanding | DeepSeek + ChatGPT via OpenRouter   |
+| JSON structured output          | Machine-readable resume metadata    |
+| User history                    | Stored resume results for each user |
+| Database migrations             | Flask-Migrate + Alembic             |
+| Clean frontend                  | Jinja2 templates                    |
+
+---
+</pre>
+</div>
+
+
+{% endif %}
+
+</div>
+{% endblock %}
