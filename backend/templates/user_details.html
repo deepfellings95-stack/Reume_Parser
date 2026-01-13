@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="max-h-screen my-auto flex justify-center items-center">
+  <div class="neu-card max-w-md w-full p-8">
+    <h2 class="text-3xl font-bold text-center mb-6 text-gray-700">
+      Sign Up
+    </h2>
+
+
+    <form id="authForm" action="{{ url_for('auth.signup_user') if 'signup' in request.path else url_for('auth.loginUser') }}" method="POST" class="space-y-5">
+
+      <input type="text" name="name" placeholder="Full Name" class="neu-input" required>
+
+      <input type="email" name="email" placeholder="Email" class="neu-input" required>
+      <input id="password" type="password" name="password" placeholder="Password" class="neu-input" required>
+
+      <input id="confirmPassword" type="password" placeholder="Confirm Password" class="neu-input" required>
+      <input type="datetime" name='dob' placeholder="(DD/MM/YYYY):" class="neu-input" required>
+	  <label class="text-sm font-bold text-gray-500" for="purpose">What Purpose you want to Use this parser:</label>
+      <select class="bg-transparent w-full text-center outline-4 text-slate-700 border-4 outiline-dark rounded-lg" id='purpose' name='purpose' required>
+		<option name='University'>University</option>
+		<option name='University'>Corporate</option>
+		<option name='University'>Personal</option>	
+	  </select>
+      <p id="errorMsg" class="text-red-500 text-sm hidden">Passwords do not match</p>
+
+
+      <button type="submit" class="neu-btn w-full mt-2 text-gray-700">Sign Up
+      </button>
+    </form>
+
+    <p class="text-center text-gray-600 mt-4 text-sm">
+      {% if 'signup' in request.path %}
+      Already have an account? <a href="/auth/login" class="text-blue-500 font-medium">Login</a>
+
+      {% endif %}
+    </p>
+  </div>
+</div>
+
+{% if 'signup' in request.path %}
+<script>
+  const form = document.getElementById('authForm');
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+  const errorMsg = document.getElementById('errorMsg');
+
+  form.addEventListener('submit', function (event) {
+      if (password.value !== confirmPassword.value) {
+          errorMsg.classList.remove("hidden");
+          event.preventDefault(); // Stop form submit
+      } else {
+          errorMsg.classList.add("hidden");
+      }
+  });
+</script>
+{% endif %}
+{% endblock %}

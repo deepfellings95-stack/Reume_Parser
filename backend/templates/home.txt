@@ -1,0 +1,393 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+	<head> 
+		<meta charset="UTF-8" /> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+		<title>{% block title %}My App{% endblock %}</title>
+		
+		<!-- Three.js CDN -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+		<script>
+			if(localStorage.theme === 'dark'){
+				document.documentElement.classList.add('dark','bg-gray-900');
+			}
+			else {
+				document.documentElement.classList.remove('dark','bg-gray-900');
+			}
+		</script>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+			/* Three.js Background Canvas */
+			#bg-canvas {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: -1;
+				background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+				transition: background 0.5s ease;
+			}
+
+			/* Dark mode background override */
+			.dark #bg-canvas {
+				background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+			}
+
+			/* Neomorphic Styles */
+			body { 
+				background: transparent; /* Changed to transparent to show canvas */
+				font-family: 'Inter', sans-serif; 
+				overflow-x: hidden;
+			}
+			.neu-card {
+				background: rgba(224, 224, 224, 0.8); /* Slight transparency */
+				backdrop-filter: blur(5px);
+				border-radius: 20px;
+				box-shadow: 8px 8px 15px rgba(0,0,0,0.1), -8px -8px 15px rgba(255,255,255,0.8);
+				transition: all 0.3s ease;
+			}
+            
+            /* Dark mode adjustment for cards to ensure readability over 3D bg */
+            .dark .neu-card {
+                background: rgba(31, 41, 55, 0.8);
+                box-shadow: 8px 8px 15px rgba(0,0,0,0.3), -8px -8px 15px rgba(255,255,255,0.05);
+            }
+
+			.neu-card:hover { 
+				box-shadow: 4px 4px 10px rgba(0,0,0,0.1), -4px -4px 10px rgba(255,255,255,0.8); 
+			} 
+			.neu-input {
+				background: rgba(224, 224, 224, 0.5); 
+				border-radius: 12px; 
+				padding: 12px 16px;
+				box-shadow: inset 4px 4px 6px rgba(0,0,0,0.1), inset -4px -4px 6px rgba(255,255,255,0.8); 
+				transition: all 0.3s ease;
+				outline: none; 
+				width: 100%; 
+			} 
+			.neu-input:focus {
+				box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1), inset -2px -2px 4px rgba(255,255,255,0.8); 
+			} 
+			
+			.neu-btn {
+				background: #e0e0e0; border-radius: 16px;
+				padding: 12px 24px;
+				box-shadow: 6px 6px 10px rgba(0,0,0,0.1), -6px -6px 10px rgba(255,255,255,0.8);
+				transition: all 0.3s ease; 
+				font-weight: 600; 
+			}
+			
+			.neu-btns { 
+				background: #0e0e0e;
+				border-radius: 8px; 
+				padding: 12px 24px; 
+				box-shadow: 6px 6px 10px #ebebeb, -6px -6px 10px #000000;
+				transition: all 0.3s ease; font-weight: 600;
+			} 
+			.neu-btn:hover { 
+				box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+			}
+			
+			aside {
+				  animation-name: myAnimation;
+					animation-duration: 1s;
+			}
+			@keyframes myAnimation {
+			  0%   {
+					opacity:0;}
+			  50%   {
+					opacity:0.5;}
+			  100% {opacity: 1;}
+			}
+		</style>
+		</head>
+	<body>
+    
+    <!-- Background Canvas for Three.js -->
+    <canvas id="bg-canvas"></canvas>
+
+	<div class="min-h-screen flex relative p-6">
+		<button id="menuBtn" class="fixed top-5 left-2 z-[1000] bg-gray-700 text-white p-2 rounded-lg transition-all duration-300"> ☰ </button>
+		<!-- Sidebar --> 
+		<aside id="sidebar" class="bg-gray-500/80 backdrop-blur-lg py-6 pl-6 flex flex-col justify-between fixed  transition-all duration-300 z-100 shadow-xl border-r border-white/20">
+			<div >
+				<h1 id="navtitle" class="text-2xl font-bold text-slate-300 mb-6 ">Resume Parser</h1>
+				{% if current_user.is_authenticated %}
+					<nav class="space-y-4 mr-6">
+						<a href="/" class="block py-2 px-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-300 transition">Home</a>
+						<button onclick="toogle_dark()" class="" type="button">
+							<i id="dark" class="text-gray-700 py-2 px-4 fa fa-toggle-on text-2xl">Dark Mode</i>
+							<i id="light" class="text-gray-700 py-2 px-4 hidden fa fa-toggle-off text-2xl">Light Mode</i>
+						</button>
+					</nav> 
+				{% else %} 
+					<nav class="space-y-4 mr-6"> 
+						<a href="{{ url_for('auth.loginUser') }}" 
+						class="block py-2 px-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-300 transition">Login</a>
+						<a href="{{ url_for('auth.signup_user') }}" class="block py-2 px-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-300 transition">Signup</a>
+						<button onclick="toogle_dark()" class="" type="button">
+							<i id="dark" class="text-gray-700 fa py-2 px-4 fa-toggle-on text-2xl">Dark Mode</i>
+							<i id="light" class="text-gray-700 py-2 px-4 hidden fa fa-toggle-off text-2xl">Light Mode</i>
+						</button>
+					</nav>
+				{% endif %}
+			</div>
+			{% if current_user.is_authenticated %} 
+				<div id="logdiv" class='mr-12'> 
+					<p class="text-slate-300 mb-2 font-semibold">Logged in as</p>
+					<p class="text-slate-400 font-medium mb-4">{{ current_user.name }}</p> 
+					<a href="{{ url_for('auth.logout') }}" class="block bg-gray-700 text-white text-center py-2 rounded-lg hover:bg-gray-800 transition"> Logout </a>
+				</div>
+			{% endif %} 
+		</aside>
+		<!-- Main Content -->
+		<main class="flex-1 max-w-screen m-auto z-10 relative">
+			{% block content %}{% endblock %}
+		</main>
+		</div>
+		<footer>
+			<div class="bg-slate-700/90 backdrop-blur-md grid gap-2 py-6 text-slate-200 grid-cols-6 border-t border-slate-600">
+				<div></div>
+				<div class="col-span-2">
+					<h3 class="text-center font-semibold">About</h3>
+					<p class=" px-2">The Resume Parsing Web Application is a full-stack Flask-based platform designed to accept resumes from users, 
+					extract meaningful structured information, and return the results in JSON format. It integrates <b class="text-blue-400">OpenRouter</b>, <b class="text-blue-400">DeepSeek</b>, 
+					and <b class="text-blue-400">ChatGPT API</b> to deliver highly accurate analysis of user resumes, providing details such as <b class="text-blue-400">skills</b>, <b class="text-blue-400">education</b>, 
+					<b class="text-blue-400">experience</b>, <b class="text-blue-400">projects</b>, <b class="text-blue-400">certifications</b>, <b class="text-blue-400">personal details</b>, and more.
+					The system includes <b class="text-blue-400">user authentication</b>, <b class="text-blue-400">database storage</b>, <b class="text-blue-400">file upload modules</b>, and <b class="text-blue-400">history management</b>, 
+					making it a complete production-ready web application.</p>					
+				</div>
+				<div>
+					<h3 class="text-center font-semibold">Parsers</h3>
+					<ul>
+						<li><b class="text-white">PyPDF2</b> (PDF parsing).</li>
+						<li><b class="text-white">python-docx</b> (DOCX parsing).</li>
+						<li><b class="text-white">OCR (PIL + pytesseract)</b> for images.</li>
+						<li><b class="text-white">Custom text parser.</b></li>
+					</ul>
+				</div>
+				<div class="col-span-2 my-auto text-center">
+					<i class="fa fa-git md:text-3xl hover:text-blue-400 transition cursor-pointer"></i>
+					<i class=" fa fa-envelope md:text-3xl hover:text-blue-400 transition cursor-pointer ml-4"></i>
+					<i class=" fa fa-github md:text-3xl hover:text-blue-400 transition cursor-pointer ml-4"></i>
+				</div>
+			</div>
+		</footer>
+		
+		<script>
+			// --- Sidebar & UI Logic ---
+			const menuBtn = document.getElementById("menuBtn"); 
+			const sidebar = document.getElementById("sidebar"); 
+			const navtitle = document.getElementById("navtitle"); 
+			const logdiv = document.getElementById("logdiv"); 
+			const lightIcon = document.getElementById("light"); 
+			const darkIcon = document.getElementById("dark"); 
+			
+			function toogle_dark(){
+				const root = document.body;
+				if (document.documentElement.classList.contains('dark')){
+					document.documentElement.classList.remove('dark','bg-gray-900');
+					root.classList.remove('dark','bg-gray-900');
+					light.classList.add('hidden');
+					dark.classList.remove('hidden');
+					localStorage.theme = 'light';
+                    updateCronoballColor(false); // Update 3D color
+				}
+				else{
+					root.classList.add('dark','bg-gray-900');
+					document.documentElement.classList.add('dark','bg-gray-900');
+					light.classList.remove('hidden');
+					dark.classList.add('hidden');
+					localStorage.theme = 'dark';
+                    updateCronoballColor(true); // Update 3D color
+				}
+			}
+
+			function mobileToggle() {
+				if (sidebar.classList.contains('-top-96')){
+					sidebar.classList.remove('-top-96'); 
+					sidebar.classList.add('top-0'); 
+				} else { 
+					sidebar.classList.remove('top-0');
+					sidebar.classList.add('-top-96');
+				}
+			}
+			
+			function desktopToggle() {
+				if (sidebar.classList.contains("left-[-210px]")) {
+					sidebar.classList.remove("left-[-210px]");
+					sidebar.classList.add("left-0"); 
+					navtitle.classList.add('ml-8')
+					menuBtn.classList.remove("left-2"); 
+					menuBtn.classList.add("left-4"); 
+					logdiv.classList.add('mr-6');
+					logdiv.classList.remove('mr-12');
+				} else { sidebar.classList.add("left-[-210px]"); 
+					sidebar.classList.remove("left-0"); 
+					navtitle.classList.remove('ml-8')
+					menuBtn.classList.add("left-2"); 
+					menuBtn.classList.remove("left-4"); 
+					logdiv.classList.remove('mr-6');
+					logdiv.classList.add('mr-12');
+				}
+			}
+			
+			function applyResponsiveSidebar() {
+				if (window.innerWidth < 768) { 
+					sidebar.classList.remove('max-h-screen', 'w-64', 'left-[-210px]','rounded-r-lg', 'top-0', 'bottom-0');
+					navtitle.classList.add('ml-8')
+					sidebar.classList.add('max-h-150px', 'w-full', 'left-0', '-top-96','rounded-b-lg');
+				} else { sidebar.classList.remove('max-h-150px','w-full', 'left-0', '-top-96','rounded-b-lg');
+					navtitle.classList.remove('ml-8')
+					sidebar.classList.add('max-h-screen', 'w-64', 'left-[-210px]', 'top-0', 'bottom-0','rounded-r-lg');
+				}
+			}
+			
+			// Init
+			applyResponsiveSidebar();
+			window.addEventListener("resize", applyResponsiveSidebar);
+			menuBtn.addEventListener("click", () => {
+				if (window.innerWidth < 768) mobileToggle(); 
+				else desktopToggle();
+			});
+
+
+            // --- THREE.JS CRONOBALL LOGIC ---
+            let scene, camera, renderer, cronoball, wireframe;
+            let originalPositions;
+
+            function initThree() {
+                const canvas = document.getElementById('bg-canvas');
+                
+                // Scene setup
+                scene = new THREE.Scene();
+                
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.z = 25;
+
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+                // Lights
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                scene.add(ambientLight);
+                
+                const pointLight = new THREE.PointLight(0xffffff, 1);
+                pointLight.position.set(10, 10, 10);
+                scene.add(pointLight);
+
+                const pointLight2 = new THREE.PointLight(0x4f46e5, 2); // Indigo glow
+                pointLight2.position.set(-10, -10, 10);
+                scene.add(pointLight2);
+
+                // Geometry: Icosahedron with detail level 4 for smooth morphing
+                const geometry = new THREE.IcosahedronGeometry(10, 4);
+                
+                // Store original positions for morphing reference
+                originalPositions = Float32Array.from(geometry.attributes.position.array);
+
+                // Material for the core
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0x64748b,
+                    flatShading: true,
+                    shininess: 100,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                cronoball = new THREE.Mesh(geometry, material);
+                scene.add(cronoball);
+
+                // Wireframe shell (The "Tech" look)
+                const wireGeo = new THREE.IcosahedronGeometry(10.1, 2);
+                const wireMat = new THREE.MeshBasicMaterial({
+                    color: 0xffffff,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.15
+                });
+                wireframe = new THREE.Mesh(wireGeo, wireMat);
+                scene.add(wireframe);
+
+                // Handle Resize
+                window.addEventListener('resize', onWindowResize);
+                
+                // Set initial color based on current theme
+                if(document.documentElement.classList.contains('dark')) {
+                    updateCronoballColor(true);
+                }
+
+                animate();
+            }
+
+            function updateCronoballColor(isDark) {
+                if(!cronoball) return;
+                
+                if(isDark) {
+                    cronoball.material.color.setHex(0x3b82f6); // Blueish in dark mode
+                    cronoball.material.emissive.setHex(0x1e3a8a);
+                    cronoball.material.emissiveIntensity = 0.2;
+                    wireframe.material.color.setHex(0x93c5fd);
+                    wireframe.material.opacity = 0.1;
+                } else {
+                    cronoball.material.color.setHex(0x94a3b8); // Slate gray in light mode
+                    cronoball.material.emissive.setHex(0x000000);
+                    cronoball.material.emissiveIntensity = 0;
+                    wireframe.material.color.setHex(0x475569);
+                    wireframe.material.opacity = 0.15;
+                }
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                const time = Date.now() * 0.001;
+
+                // Morphing Logic
+                const positions = cronoball.geometry.attributes.position;
+                const count = positions.count;
+
+                for (let i = 0; i < count; i++) {
+                    // Get original coords
+                    const ox = originalPositions[i * 3];
+                    const oy = originalPositions[i * 3 + 1];
+                    const oz = originalPositions[i * 3 + 2];
+
+                    // Simple noise approximation using sin/cos
+                    // We distort the vertex along its normal (vector from center)
+                    const noise = Math.sin(ox * 0.5 + time) * Math.cos(oy * 0.3 + time) * Math.sin(oz * 0.5 + time);
+                    const scale = 1 + noise * 0.2; // 20% distortion
+
+                    positions.setXYZ(i, ox * scale, oy * scale, oz * scale);
+                }
+                
+                positions.needsUpdate = true;
+                cronoball.geometry.computeVertexNormals(); // Recompute lighting
+
+                // Rotation
+                cronoball.rotation.y += 0.002;
+                cronoball.rotation.z += 0.001;
+                
+                wireframe.rotation.y -= 0.002; // Rotate opposite for effect
+                wireframe.rotation.z -= 0.001;
+
+                renderer.render(scene, camera);
+            }
+
+            // Start Three.js
+            initThree();
+			
+		</script> 
+		
+	</body>
+</html>

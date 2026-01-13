@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="mt-24 text-3xl font-bold text-gray-700 mb-6 text-center">Upload Resume</h2>
+
+{% if current_user.is_authenticated %}
+<div class="neu-card md:max-w-2xl sm:max-w-xs bg-slate-700 mx-auto p-8 mb-12">
+    <form action="/parser" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <input type="file" multiple name="files" accept=".pdf,.doc,.docx,.txt,image/*" class="neu-input" required>
+
+        <button type="submit" class="neu-btn w-full mt-3 text-gray-700">Upload & Parse</button>
+    </form>
+</div>
+
+<h2 class="text-2xl font-semibold text-gray-700 mb-4 text-center">Your Uploaded Resumes</h2>
+
+<div class="space-y-5 max-w-3xl space-y-8 mx-auto mb-16">
+  {% for post in posts %}
+  <div class="neu-card  p-4">
+    <div>
+      <h3 class="font-semibold text-gray-700 break-all">{{ post.filename }}</h3>
+      <p class="text-gray-500 text-sm break-all">{{ post.text[:50] }}...</p>
+    </div>
+    <div class="flex justify-between mt-4">
+      <a href="/view/{{ post.id }}">
+        <button class="neu-btn px-4 py-1 text-gray-700">View{{ post.id }}</button>
+      </a>
+	  {% if post.status == 'remaining_json' %}
+	  <a href='/generate_result/{{ post.id }}/{{ 0 }}'>
+		<button type='button'  class="neu-btn px-4 py-1 text-blue-500">Generate Results</button>
+	  </a>
+	  {% endif %}
+	  <a href='/post_delete/{{ post.id }}'>
+		<!--<button type='button' onclick="return confirm('what the heck')" class="neu-btn px-4 py-1 text-red-500">Delete</button>-->
+		<button type='button' onclick="greetUser()" class="neu-btn px-4 py-1 text-red-500">Delete</button>
+	  </a>
+    </div>
+  </div>
+  {% else %}
+  <p class="text-center text-gray-500">No resumes uploaded yet.</p>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-center text-gray-700">Please login or sign up to use the parser.</p>
+{% endif %}
+<script>
+	function do_alert(){
+		alert('HaHa, Jokes on you, I will not let you delete this')
+	}
+	function greetUser() {
+  // Use prompt() to ask for the user's name and store the input in a variable
+  let userName = prompt("Please enter your name:", "Guest");
+
+  // Check if the user entered a name (did not click Cancel or leave it empty)
+  if (userName != null && userName !== "") {
+    // Use alert() to display a message including the input
+    alert("Hello, " + userName + "! Welcome to the site.");
+  } else {
+    alert("Hello there! You didn't enter a name.");
+  }
+}
+</script>
+{% endblock %}
+{% block footer %}
+<div class="grid-cols-6 space-x-2 py-8 text-gray-300 grid bg-slate-700">
+	<div></div>
+	<div id='about' class="col-span-2 pr-2">
+		<h3 class="text-center font-semibold">About</h3>
+		<p>The "Resume Parsing Web Application" is a full-stack Flask-based platform designed to accept resumes from users, 
+		extract meaningful structured information, and return the results in JSON format. It integrates <b class="text-blue-500">OpenRouter</b>, <b class="text-blue-500">DeepSeek</b>, 
+		and <b class="text-blue-500">ChatGPT API</b> to deliver highly accurate analysis of user resumes, providing details such as </b class="text-blue-500">skills</b>, <b class="text-blue-500">education</b>,
+		 <b class="text-blue-500">experience</b>, <b class="text-blue-500">projects</b>, </b>certifications</b>, <b class="text-blue-500">personal details</b>, and more.</p>
+	</div>
+	<div id='parser' class="text-center">
+		<h3 class=" font-semibold">Parser Used</h3>
+		<ul class='space-y-4'>
+			<li>PyPDF2 (PDF parsing).</li>
+			<li>python-docx (DOCX parsing).</li>
+			<li>OCR (PIL + pytesseract)  for images.</li>
+			<li>Custom text parser. </li>
+		</ul>
+
+	</div>
+	<div id='links' class="col-span-2 my-auto space-x-2 text-center">
+		<i class="fa fa-envelope" style="font-size:36px"></i>
+		<i class="fa fa-git" style="font-size:36px"></i>
+		<i class="fa fa-github" style="font-size:36px"></i>
+	</div>
+</div>
+{% endblock %}

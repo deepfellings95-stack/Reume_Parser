@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Three.js Earth + Hover‑Spawn Buildings</title>
+  <style>
+    body { margin:0; overflow:hidden; }
+    canvas { display:block; }
+    #info {
+      position: absolute;
+      top: 10px; left: 10px;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.5);
+      color:#fff;
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:14px;
+      border-radius:4px;
+    }
+  </style>
+</head>
+<body>
+<div id="info">Hover over the globe → a building appears</div>
+<script type="module">
+  // -------------------------------------------------------------
+  // 1️⃣ Imports (Three.js core + helpers from CDN)
+  // -------------------------------------------------------------
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
+  import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
+  import { TextureLoader } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
+
+  // -------------------------------------------------------------
+  // 2️⃣ Basic scene, camera, renderer
+  // -------------------------------------------------------------
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(
+    45,                                 // fov
+    window.innerWidth / window.innerHeight, // aspect
+    0.1, 1000                           // near / far
+  );
+  camera.position.set(0, 0, 8);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // -------------------------------------------------------------
+  // 3️⃣ Controls (orbit + damping)
+  // -------------------------------------------------------------
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+
+  // -------------------------------------------------------------
+  // 4️⃣ Earth – sphere + texture
+  // -------------------------------------------------------------
+  const RADIUS = 2; // Earth radius in scene units
+  const sphereGeometry = new THREE.SphereGeometry(RADIUS, 64, 64);
+
+  // Earth texture – public domain image from NASA (or any other CDN)
+  const textureLoader = new THREE.TextureLoader();
+  const earthTexture = textureLoader.load(
+    'https://cdn.jsdelivr.net/gh/ajduncan/earth-texture@master/2_no_clouds_4k.jpg'
+  );
+  const earthMaterial = new THREE.MeshStandardMaterial({
+    map: earthTexture,
+    // optional: add a slight bump map for realism
+    // bumpMap: textureLoader.load('...'),
+    // bumpScale: 0.02,
+  });
+
+  const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
+  scene.add(earthMesh);
+
+  // -------------------------------------------------------------
+  // 5️⃣ Light (simple daylight + ambient)
+  // -------------------------------------------------------------
+  const ambient = new THREE.AmbientLight(0xcccccc, 0.5);
+  scene.add(ambient);
+
+  const directional = new THREE.DirectionalLight(0xffffff, 1);
+  directional.position.set(5, 3, 5);
+  scene.add(directional);
+
+  // -------------------------------------------------------------
+  // 6️⃣ Raycaster + mouse handling
+  // -------------------------------------------------------------
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  function onMouseMove(event) {
+    // Convert mouse coords to normalized device coordinates (-1 … +1)
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  }
+  window.addEventListener('mousemove', onMouseMove, false);
+
+  // -------------------------------------------------------------
+  // 7️⃣ Building generator
+  // -------------------------------------------------------------
+  function spawnBuilding(atPoint, normal) {
+    // Simple box – you can replace this with any GLTF/OBJ model later
+    const width = 0.15, depth = 0.15, height = 0.5;
+    const geometry = new THREE.BoxGeometry(width, height, depth);
+    const material = new THREE.MeshStandardMaterial({ color: 0x8b8b8b });
+    const building = new THREE.Mesh(geometry, material);
+
+    // Position: push the building slightly above the surface to avoid z‑fighting
+    const offset = normal.clone().multiplyScalar(height / 2 + 0.01);
+    building.position.copy(atPoint).add(offset);
+
+    // Orientation: align the building's Y‑axis with the surface normal
+    const up = new THREE.Vector3(0, 1, 0);
+    const quat = new THREE.Quaternion().setFromUnitVectors(up, normal);
+    building.quaternion.copy(quat);
+
+    scene.add(building);
+  }
+
+  // -------------------------------------------------------------
+  // 8️⃣ Animation loop
+  // -------------------------------------------------------------
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Slowly rotate Earth for a nice visual effect
+    earthMesh.rotation.y += 0.0005;
+
+    // Update controls (damping)
+    controls.update();
+
+    // ---- Hover detection ------------------------------------------------
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(earthMesh);
+    if (intersects.length > 0) {
+      // Get first intersection point & normal
+      const intersect = intersects[0];
+      const point = intersect.point.clone();      // world space
+      const normal = intersect.face.normal.clone()
+                      .applyMatrix3(new THREE.Matrix3().getNormalMatrix(earthMesh.matrixWorld))
+                      .normalize();
+
+      // Spawn a building **once per hover** (you can add debouncing if you wish)
+      spawnBuilding(point, normal);
+    }
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // -------------------------------------------------------------
+  // 9️⃣ Responsive handling
+  // -------------------------------------------------------------
+  window.addEventListener('resize', () => {
+    const w = window.innerWidth, h = window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+</script>
+</body>
+</html>

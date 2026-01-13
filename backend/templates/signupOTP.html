@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Signup{% endblock %}
+
+{% block content %}
+<div class="max-h-screen my-auto flex justify-center items-center">
+	<div class="neu-card max-w-md w-full p-8">
+		<h2 class="text-3xl font-bold text-center mb-6 text-gray-700">
+		Sign Up
+		</h2>
+
+	{% if otp_received %}
+		<form id="authForm" action="{{ url_for('otp.verify_otp') }}" method="POST" class="space-y-5">
+	{% elif forget %}
+		<form id="authForm" action="{{ url_for('otp.forget_password') }}" method="POST" class="space-y-5">
+	{% else %}	
+		<form id="authForm" action="{{ url_for('otp.request_otp') }}" method="POST" class="space-y-5">
+	{% endif %}
+			<fieldset id="base_data" class="space-y-5"> 
+				{% if otp_received %}
+					<input type="number" name="otp" placeholder="enter the OTP" class="neu-input" required>
+					<button type="submit" class="neu-btn w-full mt-2 text-gray-700">Verify</button>	
+				{% else %}
+					<input type='email'  name="email" placeholder="yourmail@mail.com" class="neu-input" required>
+					<button type="submit" class="neu-btn w-full mt-2 text-gray-700">Get OTP</button>
+				{% endif %}
+			</fieldset>
+
+		</form>
+
+		<p class="text-center text-gray-600 mt-4 text-sm">
+		{% if 'signup' in request.path %}
+		Already have an account? <a href="/auth/login" class="text-blue-500 font-medium">Login</a><br>
+		<a href="{{ url_for('auth.google_login') }}" class="text-blue-500 font-medium">Signup using Google <i class="fa fa-google" style="font-size:16px"></i></a>
+
+		{% endif %}
+		</p>
+	</div>
+</div>
+{% endblock %}

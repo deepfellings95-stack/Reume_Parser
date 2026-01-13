@@ -1,0 +1,231 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+	<head> 
+		<meta charset="UTF-8" /> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+		<title>{% block title %}My App{% endblock %}</title>
+		<script>
+			if(localStorage.theme === 'dark'){
+				document.documentElement.classList.add('dark','bg-gray-900');
+			}
+			else {
+				document.documentElement.classList.remove('dark','bg-gray-900');
+			}
+		</script>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+			/* Neomorphic Styles */
+			
+			body { 
+				background: inherit;/*#e0e0e0;*/
+				font-family: 'Inter', sans-serif; 
+			}
+			.neu-card {
+				background: #e0e0e0;
+				border-radius: 20px;
+				box-shadow: 8px 8px 15px #bebebe, -8px -8px 15px #ffffff;
+				transition: all 0.3s ease;
+			}
+			.neu-card:hover { 
+				box-shadow: 4px 4px 10px #bebebe, -4px -4px 10px #ffffff; 
+			} 
+			.neu-input {
+				background: #e0e0e0; 
+				border-radius: 12px; 
+				padding: 12px 16px;
+				box-shadow: inset 4px 4px 6px #bebebe, inset -4px -4px 6px #ffffff; 
+				transition: all 0.3s ease;
+				outline: none; 
+				width: 100%; 
+			} 
+			.neu-input:focus {
+				box-shadow: inset 2px 2px 4px #bebebe, inset -2px -2px 4px #ffffff; 
+			} 
+			
+			.neu-btn {
+				background: #e0e0e0; border-radius: 16px;
+				padding: 12px 24px;
+				box-shadow: 6px 6px 10px #bebebe, -6px -6px 10px #ffffff;
+				transition: all 0.3s ease; 
+				font-weight: 600; 
+			}
+			
+			.neu-btns { 
+				background: #0e0e0e;
+				border-radius: 8px; 
+				padding: 12px 24px; 
+				box-shadow: 6px 6px 10px #ebebeb, -6px -6px 10px #000000;
+				transition: all 0.3s ease; font-weight: 600;
+			} 
+			.neu-btn:hover { 
+				box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+			}
+			
+			aside {
+				  animation-name: myAnimation;
+					animation-duration: 1s;
+			}
+			@keyframes myAnimation {
+			  0%   {
+					opacity:0;}
+			  50%   {
+					opacity:0.5;}
+			  100% {opacity: 1;}
+			}
+		</style>
+		</head>
+	<body>
+	<div class="min-h-screen flex relative p-6">
+		<button id="menuBtn" class="fixed top-5 left-2 z-[1000] bg-gray-700 text-white p-2 rounded-lg transition-all duration-300"> ☰ </button>
+		<!-- Sidebar --> 
+		<aside id="sidebar" class="bg-gray-500 backdrop-blur-lg py-6 pl-6 flex flex-col justify-between fixed  transition-all duration-300 z-100">
+			<div >
+				<h1 id="navtitle" class="text-2xl font-bold text-slate-300 mb-6 ">Resume Parser</h1>
+				{% if current_user.is_authenticated %}
+					<nav class="space-y-4 mr-6">
+						<a href="/" class="block py-2 px-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-300 transition">Home</a>
+						<button onclick="toogle_dark()" class="" type="button">
+							<i id="dark" class="text-gray-700 py-2 px-4 fa fa-toggle-on text-2xl">Dark Mode</i>
+							<i id="light" class="text-gray-700 py-2 px-4 hidden fa fa-toggle-off text-2xl">Light Mode</i>
+						</button>
+					</nav> 
+				{% else %} 
+					<nav class="space-y-4 mr-6"> 
+						<a href="{{ url_for('auth.loginUser') }}" 
+						class="block py-2 px-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-300 transition">Login</a>
+						<a href="{{ url_for('auth.signup_user') }}" class="block py-2 px-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-300 transition">Signup</a>
+						<button onclick="toogle_dark()" class="" type="button">
+							<i id="dark" class="text-gray-700 fa py-2 px-4 fa-toggle-on text-2xl">Dark Mode</i>
+							<i id="light" class="text-gray-700 py-2 px-4 hidden fa fa-toggle-off text-2xl">Light Mode</i>
+						</button>
+					</nav>
+				{% endif %}
+			</div>
+			{% if current_user.is_authenticated %} 
+				<div id="logdiv" class='mr-12'> 
+					<p class="text-slate-300 mb-2 font-semibold">Logged in as</p>
+					<p class="text-slate-400 font-medium mb-4">{{ current_user.name }}</p> 
+					<a href="{{ url_for('auth.logout') }}" class="block bg-gray-700 text-white text-center py-2 rounded-lg hover:bg-gray-800 transition"> Logout </a>
+				</div>
+			{% endif %} 
+		</aside>
+		<!-- Main Content -->
+		<main class="flex-1 max-w-screen m-auto">
+			{% block content %}{% endblock %}
+		</main>
+		</div>
+		<footer>
+			<div class="bg-slate-700 grid gap-2 py-6 text-slate-200 grid-cols-6">
+				<div></div>
+				<div class="col-span-2">
+					<h3 class="text-center font-semibold">About</h3>
+					<p class=" px-2">The Resume Parsing Web Application is a full-stack Flask-based platform designed to accept resumes from users, 
+					extract meaningful structured information, and return the results in JSON format. It integrates <b class="text-blue-600">OpenRouter</b>, <b class="text-blue-600">DeepSeek</b>, 
+					and <b class="text-blue-600">ChatGPT API</b> to deliver highly accurate analysis of user resumes, providing details such as <b class="text-blue-600">skills</b>, <b class="text-blue-600">education</b>, 
+					<b class="text-blue-600">experience</b>, <b class="text-blue-600">projects</b>, <b class="text-blue-600">certifications</b>, <b class="text-blue-600">personal details</b>, and more.
+					The system includes <b class="text-blue-600">user authentication</b>, <b class="text-blue-600">database storage</b>, <b class="text-blue-600">file upload modules</b>, and <b class="text-blue-600">history management</b>, 
+					making it a complete production-ready web application.</p>					
+				</div>
+				<div>
+					<h3 class="text-center font-semibold">Parsers</h3>
+					<ul>
+						<li><b class="text-white">PyPDF2</b> (PDF parsing).</li>
+						<li><b class="text-white">python-docx</b> (DOCX parsing).</li>
+						<li><b class="text-white">OCR (PIL + pytesseract)</b> for images.</li>
+						<li><b class="text-white">Custom text parser.</b></li>
+					</ul>
+				</div>
+				<div class="col-span-2 my-auto text-center">
+					<i class="fa fa-git md:text-3xl"></i>
+					<i class=" fa fa-envelope md:text-3xl"></i>
+					<i class=" fa fa-github md:text-3xl"></i>
+				</div>
+			</div>
+		</footer>
+		
+		<script>
+			const menuBtn = document.getElementById("menuBtn"); 
+			const sidebar = document.getElementById("sidebar"); 
+			const navtitle = document.getElementById("navtitle"); 
+			const logdiv = document.getElementById("logdiv"); 
+			const lightIcon = document.getElementById("light"); 
+			const darkIcon = document.getElementById("dark"); 
+			
+			function toogle_dark(){
+				const root = document.body;
+				if (document.documentElement.classList.contains('dark')){
+					document.documentElement.classList.remove('dark','bg-gray-900');
+					root.classList.remove('dark','bg-gray-900');
+					light.classList.add('hidden');
+					dark.classList.remove('hidden');
+					
+					localStorage.theme = 'light';
+				}
+				else{
+					root.classList.add('dark','bg-gray-900');
+					document.documentElement.classList.add('dark','bg-gray-900');
+					light.classList.remove('hidden');
+					dark.classList.add('hidden');
+					
+					localStorage.theme = 'dark';
+				}
+			}
+
+			function mobileToggle() {
+				if (sidebar.classList.contains('-top-96')){
+					sidebar.classList.remove('-top-96'); 
+					sidebar.classList.add('top-0'); 
+				} else { 
+					sidebar.classList.remove('top-0');
+					sidebar.classList.add('-top-96');
+				}
+			}
+			
+			
+			function desktopToggle() {
+				if (sidebar.classList.contains("left-[-210px]")) {
+					sidebar.classList.remove("left-[-210px]");
+					sidebar.classList.add("left-0"); 
+					navtitle.classList.add('ml-8')
+					menuBtn.classList.remove("left-2"); 
+					menuBtn.classList.add("left-4"); 
+					logdiv.classList.add('mr-6');
+					logdiv.classList.remove('mr-12');
+				} else { sidebar.classList.add("left-[-210px]"); 
+					sidebar.classList.remove("left-0"); 
+					navtitle.classList.remove('ml-8')
+					menuBtn.classList.add("left-2"); 
+					menuBtn.classList.remove("left-4"); 
+					logdiv.classList.remove('mr-6');
+					logdiv.classList.add('mr-12');
+				} // or any behavior you want 
+			}
+			
+			function applyResponsiveSidebar() {
+				if (window.innerWidth < 768) { 
+					sidebar.classList.remove('max-h-screen', 'w-64', 'left-[-210px]','rounded-r-lg', 'top-0', 'bottom-0');
+					navtitle.classList.add('ml-8')
+					sidebar.classList.add('max-h-150px', 'w-full', 'left-0', '-top-96','rounded-b-lg');
+				} else { sidebar.classList.remove('max-h-150px','w-full', 'left-0', '-top-96','rounded-b-lg');
+					navtitle.classList.remove('ml-8')
+					sidebar.classList.add('max-h-screen', 'w-64', 'left-[-210px]', 'top-0', 'bottom-0','rounded-r-lg');
+				}
+			}
+			// Run when page loads 
+			applyResponsiveSidebar();
+			// Run whenever window is resized
+			window.addEventListener("resize", applyResponsiveSidebar);
+			menuBtn.addEventListener("click", () => {
+				if (window.innerWidth < 768) {
+					mobileToggle(); 
+				} else {
+					desktopToggle();
+			
+				}
+			});
+			
+		</script> 
+		
+	</body>
+</html>

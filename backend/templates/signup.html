@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+{% block title %}Signup{% endblock %}
+
+{% block content %}
+<div class="max-h-screen my-auto flex justify-center items-center">
+	<div class="neu-card max-w-md w-full p-8">
+		<h2 class="text-3xl font-bold text-center mb-6 text-gray-700">
+		Sign Up
+		</h2>
+
+
+		<form id="authForm" action="{{ url_for('auth.signup_user') }}" method="POST" class="space-y-5">
+			<fieldset id="base_data" class="space-y-5"> 
+				{% if session['name'] %}
+					<input type="text" value="{{ session.name }}" class="neu-input" name="name" readonly>
+				{% else %}
+					<input type="text" placeholder="Put anything here and it will be your name." class="neu-input" name="name">
+				{% endif %}
+				<input type="text" name="usage" placeholder="why you want to use our product" class="neu-input" required>
+
+				<input id="password" type="password" name="password" placeholder="Password" class="neu-input" required>
+
+				<input id="confirmPassword" type="password" placeholder="Confirm Password" class="neu-input" required>
+				<input type="date" name='dob' placeholder="(DD/MM/YYYY):" class="neu-input text-gray-400" required>
+				<div class="my-4">
+					<label class="ml-4 text-sm font-bold text-gray-500" for="purpose">What Purpose you want to Use this parser:</label>
+					<select class="bg-transparent w-full text-center outline-4 font-bold text-gray-500 border-2 border-black rounded-lg" id='purpose' name='purpose' required>
+						<option name='university'>University</option>
+						<option name='corporate'>Corporate</option>
+						<option name='personal'>Personal</option>	
+					</select>
+				</div>
+				<p id="errorMsg" class="text-red-500 text-sm hidden">Passwords do not match</p>
+
+
+				<button type="button" class="neu-btn w-full mt-2 text-gray-700" id="nextBtn">
+    next page
+</button>
+
+			</fieldset>
+			<fieldset id="university" style="display:none;"  class="space-y-5"> 
+				<input type="text" class="neu-input" id='university_name' name="university_name" placeholder="Your University Name">
+				<input type="email" class="neu-input" id='university_mail' name="university_mail" placeholder="your University email">
+				<input type="text" class="neu-input" id='university_city' name="city" placeholder="which city it belongs">
+				<input type="text" class="neu-input" id='university_provine' name="provine" placeholder="Any provine">
+				<button type="button" class="neu-btn w-full mt-2 text-gray-700 prevBtn">
+    previous page
+</button>
+
+				<button type="submit" class="neu-btn w-full mt-2 text-gray-700">Final Submission
+				</button>
+			</fieldset>
+			<fieldset id="corporate" style="display:none;" class="space-y-5"> 
+				<input type="text" class="neu-input" id='corporate_name' name="corporate_name" placeholder="Your corporate Name">
+				<input type="email" class="neu-input" id='corporate_mail' name="corporate_mail" placeholder="your corporate email">
+				<div class="my-4">
+					<label class="ml-4 text-sm font-bold text-gray-500" for="purpose">How many people work there, any Idea:</label>
+					<select class="bg-transparent w-full text-center outline-4 font-bold text-gray-500 border-2 border-black rounded-lg" id='strength' name='strength'>
+						<option name='zero'>0</option>
+						<option name='lessThen20'>0-20</option>
+						<option name='btw20to50'>20-50</option>
+						<option name='btw50to100'>50-100</option>	
+						<option name='btw100to500'>100-500</option>	
+						<option name='more500'>500++</option>	
+					</select>
+				</div>
+				<div class="my-4">
+					<label class="ml-4 text-sm font-bold text-gray-500" for="purpose">In which Sector you are working?</label>
+					<select class="bg-transparent w-full text-center outline-4 font-bold text-gray-500 border-2 border-black rounded-lg" id='sector' name='sector'>
+						<option name='none'>None</option>
+						<option name='IT'>Information Technology</option>
+						<option name='textile'>Textile</option>
+						<option name='health'>Healthcare</option>	
+						<option name='FandB'>Finance and Banking</option>	
+						<option name='edu'>Education</option>	
+						<option name='gov'>Goverment</option>	
+						<option name='manuf'>Manufacturing</option>	
+						<option name='EandU'>Energy and Utitlites</option>	
+						<option name='HandT'>Hospitality and Tourism</option>	
+						<option name='TandL'>Transportation and Logistics</option>	
+						<option name='retail'>Retail</option>	
+						<option name='Corporate_option_other' value="Other">Other</option>	
+					</select>
+				</div>
+				<input type="text" class="neu-input hidden" name="corporate_other" id="corporate_other" placeholder="Please Enter you Other Sector of work">
+				<button type="button" class="neu-btn w-full mt-2 text-gray-700 prevBtn">
+    previous page
+</button>
+
+				<button type="submit" onClick="form_submit()" class="neu-btn w-full mt-2 text-gray-700">Final Submission
+				</button>
+			</fieldset>
+			<fieldset id="personal" style="display:none;" class="space-y-5"> 
+				<input type="number" class="neu-input" id='personal_num' name="personal_number" placeholder="What is mobile number">
+				<input type="text" class="neu-input" id='personal_city' name="personal_city" placeholder="we want to know you city">
+				<input type="text" class="neu-input" id='personal_state' name="state" placeholder="which state you belong from">
+				<button type="button" class="neu-btn w-full mt-2 text-gray-700 prevBtn">
+    previous page
+</button>
+
+				<button type="submit" class="neu-btn w-full mt-2 text-gray-700">Final Submission
+				</button>
+			</fieldset>
+
+		</form>
+
+		<p class="text-center text-gray-600 mt-4 text-sm">
+		{% if 'signup' in request.path %}
+		Already have an account? <a href="/auth/login" class="text-blue-500 font-medium">Login</a><br>
+		<a href="{{ url_for('auth.google_login') }}" class="text-blue-500 font-medium">Signup using Google <i class="fa fa-google" style="font-size:16px"></i></a>
+
+		{% endif %}
+		</p>
+	</div>
+</div>
+
+{% if 'signup' in request.path %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('authForm');
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+  const errorMsg = document.getElementById('errorMsg');
+  const baseData = document.getElementById('base_data');
+  const university = document.getElementById('university');
+  const personal = document.getElementById('personal');
+  const corporate = document.getElementById('corporate');
+  const purpose = document.getElementById('purpose');
+  const corporate_other = document.getElementById('corporate_other');
+  const corporate_sector = document.getElementById('sector');
+  
+  let choice = ''
+  let corporate_choice = ''
+
+  // BLOCK ENTER KEY
+  form.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  });
+
+  // NEXT BUTTON
+  nextBtn.addEventListener('click', function (event) {
+    event.preventDefault();
+    nextStep();
+  });
+  
+const prevButtons = document.querySelectorAll('.prevBtn');
+
+prevButtons.forEach(btn => {
+  btn.addEventListener('click', function (event) {
+    event.preventDefault();
+    prevStep();
+  });
+});
+
+
+  // FORM SUBMIT GUARD
+  form.addEventListener('submit', function (event) {
+    if (password.value !== confirmPassword.value) {
+      errorMsg.classList.remove("hidden");
+      event.preventDefault();
+      return;
+    }
+
+    errorMsg.classList.add("hidden");
+
+    if (baseData.style.display !== "none") {
+      event.preventDefault();
+    }
+  });
+  
+function form_submit(){
+	corporate_choice = corporate_sector.value;
+	console.log('the corporate choice is ', corporate_choice);
+
+	if (corporate_choice === "Other" && corporate_other.classList.contains('hidden')){
+		corporate_other.setAttribute('required', true);
+		corporate_other.classList.remove('hidden');
+		console.log('shown other input');
+		return;
+	}
+	else if(corporate_choice !=="Other" && corporate_other.required == true){
+		corporate_other.removeAttribute('required', false);
+		corporate_other.classList.add('hidden');
+		return;
+	}
+	else{
+		if(form.checkValidity()){
+			form.submit();
+			console.log('form submitted');
+		}
+		else{
+			form.reportValidity();
+		}
+	}
+
+}
+  
+function nextStep() {
+
+	choice = purpose.value;
+	baseData.style.opacity = 0;
+	console.log("Selected Purpose:", choice);
+	
+	
+	
+	const U_name = document.getElementById('university_name');
+	const U_mail = document.getElementById('university_mail');
+	const U_city = document.getElementById('university_city');
+	const C_name = document.getElementById('corporate_name');
+	const C_mail = document.getElementById('corporate_mail');
+	const C_strength = document.getElementById('strength');
+	const C_sector = document.getElementById('sector');
+	const P_num = document.getElementById('personal_num');
+	const P_city = document.getElementById('personal_city');
+	const P_state = document.getElementById('personal_state');
+	
+	
+	if (choice == 'University'){
+		C_name.removeAttribute('required');
+		C_name.value = '';
+		C_mail.removeAttribute('required');
+		C_mail.value = '';
+		C_strength.removeAttribute('required');
+		C_strength.value = '';
+		C_sector.removeAttribute('required');
+		C_sector.value = '';
+		P_num .removeAttribute('required',);
+		P_num.value = '';
+		P_city.removeAttribute('required');
+		P_city.value = '';
+		corporate_other.removeAttribute('required');
+		corporate_other.value = '';
+		P_state.removeAttribute('required');
+		P_state.value = '';
+		U_name.setAttribute('required',true);
+		U_mail.setAttribute('required',true);
+		U_city.setAttribute('required',true);
+		setTimeout(()=>{
+			baseData.style.display="none";
+			university.style.display="block";
+			university.style.opacity = 1;
+		},200);
+	}
+	else if (choice == 'Corporate'){
+		U_name.removeAttribute('required');
+		U_name.value = '';
+		U_mail.removeAttribute('required');
+		U_mail.value = '';
+		U_city.removeAttribute('required');
+		U_city.value = '';
+		P_num .removeAttribute('required',);
+		P_num.value = '';
+		P_city.removeAttribute('required');
+		P_city.value = '';
+		P_state.removeAttribute('required');
+		P_state.value = '';
+		C_name.setAttribute('required', true);
+		C_mail.setAttribute('required', true);
+		C_sector.setAttribute('required', true);
+		C_strength.setAttribute('required', true);
+		setTimeout(()=>{
+			baseData.style.display="none";
+			corporate.style.display="block";
+			corporate.style.opacity = 1;
+		},200);
+	}
+	else if (choice == 'Personal'){
+		U_name.removeAttribute('required');
+		U_name.value = '';
+		U_mail.removeAttribute('required');
+		U_mail.value = '';
+		U_city.removeAttribute('required');
+		U_city.value = '';
+		corporate_other.removeAttribute('required');
+		corporate_other.value = '';
+		C_name.removeAttribute('required');
+		C_name.value = '';
+		C_mail.removeAttribute('required');
+		C_mail.value = '';
+		C_strength.removeAttribute('required');
+		C_strength.value = '';
+		C_sector.removeAttribute('required');
+		C_sector.value = '';
+		P_num.setAttribute('required',true);
+		P_city.setAttribute('required',true);
+		P_state.setAttribute('required',true);
+		setTimeout(() =>{
+			baseData.style.display="none";
+			personal.style.display="block";
+			personal.style.opacity = 1;
+		}, 200);
+	}
+	else{
+		U_name.removeAttribute('required');
+		
+		corporate_other.removeAttribute('required');
+		corporate_other.value = '';
+		U_mail.removeAttribute('required');
+		U_city.removeAttribute('required');
+		C_name.removeAttribute('required');
+		C_mail.removeAttribute('required');
+		C_strength.removeAttribute('required');
+		C_sector.removeAttribute('required');
+		P_num .removeAttribute('required',);
+		P_city.removeAttribute('required');
+		P_state.removeAttribute('required');
+		
+	}
+
+}
+
+function prevStep() {
+  document.querySelectorAll('fieldset').forEach(fs => {
+    fs.style.display = fs.id === 'base_data' ? 'block' : 'none';
+    fs.style.opacity = fs.id === 'base_data' ? 1 : 0;
+  });
+}
+
+
+ });
+</script>
+{% endif %}
+{% endblock %}

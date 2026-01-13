@@ -1,0 +1,296 @@
+Folder PATH listing for volume New Volume
+Volume serial number is 8CB1-BB1E
+D:.
+³   .env
+³   .gitignore
+³   app.py
+³   client_secret_691713226166-9vn05br9fs6acbg5kjv48ilvofcla6gs.apps.googleusercontent.com.json
+³   config.py
+³   extensions.py
+³   init_database.py
+³   migrate_database.py
+³   README.md
+³   requirements.txt
+³   str.txt
+³   tree.txt
+³   
+ÃÄÄÄauth
+³   ³   routes.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           
+ÃÄÄÄdatabase
+³   ³   database.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           
+ÃÄÄÄdatabase_models
+³   ³   models.py
+³   ³   posts.py
+³   ³   resume_details.py
+³   ³   resume_model.py
+³   ³   user_details.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           
+ÃÄÄÄdelete
+³   ³   post_delete.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           
+ÃÄÄÄenv
+³   ³   .gitignore
+³   ³   pyvenv.cfg
+³   ³   
+³   ÃÄÄÄInclude
+³   ³   ÀÄÄÄsite
+³   ³       ÀÄÄÄpython3.13
+³   ³           ÀÄÄÄgreenlet
+³   ³                   greenlet.h
+³   ³                   
+³   ÃÄÄÄLib
+³   ³   ÀÄÄÄsite-packages
+³   ³       ³   pythoncom.py
+³   ³       ³   PyWin32.chm
+³   ³       ³   pywin32.pth
+³   ³       ³   pywin32.version.txt
+³   ³       ³   typing_extensions.py
+³   ³       ³   _cffi_backend.cp313-win_amd64.pyd
+³   ³       ³   
+³   ³       ÃÄÄÄadodbapi
+³   ³       ³   ³   
+³   ³       ³   ÃÄÄÄexamples
+³   ³       ³   ³       db_print.py
+³   ³       ³   ³       db_table_names.py
+³   ³       ³   ³       xls_read.py
+³   ³       ³   ³       xls_write.py
+³   ³       ³   ³       
+³   ³       ³   ÀÄÄÄtest
+³   ³       ³           
+³   ³       ÃÄÄÄalembic
+³   ³       ³   ³   
+³   ³       ³   ÃÄÄÄautogenerate
+³   ³       ³   ³   ³   api.py
+³   ³       ³   ³   ÀÄÄÄ__pycache__
+³   ³       ³   ³           api.cpython-313.pyc
+³   ³       ³   ³           
+³   ³       ³   ÃÄÄÄddl
+³   ³       ³   ³   ³   
+³   ³       ³   ³   ÀÄÄÄ__pycache__
+³   ³       ³   ³           
+³   ³       ³   ÃÄÄÄoperations
+³   ³       ³   ³   ³   
+³   ³       ³   ³   ÀÄÄÄ__pycache__
+³   ³       ³   ³           
+³   ³       ³   ÃÄÄÄruntime
+³   ³       ³   ³   ³   
+³   ³       ³   ³   ÀÄÄÄ__pycache__
+³   ³       ³   ³           
+³   ³       ³   ÃÄÄÄscript
+³   ³       ³   ³   ³   
+³   ³       ³   ³   ÀÄÄÄ__pycache__
+³   ³       ³   ³           
+³   ³       ³   ÃÄÄÄtemplates
+³   ³       ³   ³   ÃÄÄÄasync
+³   ³       ³   ³   ³       
+³   ³       ³   ³   ÃÄÄÄgeneric
+³   ³       ³   ³   ³       
+³   ³       ³   ³   ÃÄÄÄmultidb
+³   ³       ³   ³   ÃÄÄÄpyproject
+³   ³       ³   ³   ³       
+³   ³       ³   ³   ÀÄÄÄpyproject_async
+³   ³       ³   ³           
+³   ³       ³   ÃÄÄÄtesting
+³   ³       ³   ³   ³   
+³   ³       ³   ³   ÃÄÄÄplugin
+³   ³       ³   ³   ÀÄÄÄsuite
+³   ³       ³   ³           
+³   ³       ³   ÃÄÄÄutil
+³   ³       ³   ³   ÀÄÄÄ__pycache__
+³   ³       ³   ³           
+³   ³       ³   ÀÄÄÄ__pycache__
+³   ³       ³           
+³   ³       ÃÄÄÄalembic-1.17.2.dist-info
+³   ³       ³   ³   
+³   ³       ³   ÀÄÄÄlicenses
+³   ³       ÃÄÄÄannotated_types
+³   ³       ³   ³   
+³   ³       ³   ÀÄÄÄ__pycache__
+³   ³       ÃÄÄÄannotated_types-0.7.0.dist-info
+³   ³       ³   ÀÄÄÄlicenses
+³   ³       ³           LICENSE
+³   ³       ³           
+³   ³       ÃÄÄÄanyio
+³   ³       ³   ³   
+ÃÄÄÄextension
+³   ³   redis_client.py
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           redis_client.cpython-313.pyc
+³           __init__.cpython-313.pyc
+³           
+ÃÄÄÄinstance
+³       site.db
+³       
+ÃÄÄÄmigrations
+³   ³   alembic.ini
+³   ³   env.py
+³   ³   README
+³   ³   script.py.mako
+³   ³   
+³   ÀÄÄÄversions
+ÃÄÄÄmodels
+³   ³   chatgpt_response.py
+³   ³   deepseek_response.py
+³   ³   groq_response.py
+³   ³   New Text Document.txt
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           chatgpt_response.cpython-313.pyc
+³           deepseek_response.cpython-313.pyc
+³           groq_response.cpython-313.pyc
+³           
+ÃÄÄÄparsers
+³   ³   another_imp_parsers.py
+³   ³   doc_parser.py
+³   ³   image_parser.py
+³   ³   image_parser2.py
+³   ³   pypdf2_parser.py
+³   ³   text_parser.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           another_imp_parsers.cpython-313.pyc
+³           doc_parser.cpython-313.pyc
+³           image_parser2.cpython-313.pyc
+³           pypdf2_parser.cpython-313.pyc
+³           text_parser.cpython-313.pyc
+³           
+ÃÄÄÄsecurity
+³   ³   csrf.py
+³   ³   otp_service.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           csrf.cpython-313.pyc
+³           otp_service.cpython-313.pyc
+³           
+ÃÄÄÄtemplates
+³       admin.html
+³       base.html
+³       base.txt
+³       home.html
+³       home.txt
+³       login.html
+³       post.html
+³       result.html
+³       signup.html
+³       signupOTP.html
+³       user_details.html
+³       
+ÃÄÄÄupload
+³   ³   img_image1.png
+³   ³   
+³   ÃÄÄÄuser_14be4dfc-0f86-4e1b-872b-2e00d16cddbb
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765589070.pdf
+³   ³       
+³   ÃÄÄÄuser_1746827e-9a44-48a7-8159-9a9d9778e97e
+³   ³       image.png_1768178583.png
+³   ³       image.png_1768178790.png
+³   ³       image_1.png_1768178581.png
+³   ³       
+³   ÃÄÄÄuser_3b1c2ded-753f-4d2c-8a66-3ef14386f1a2
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765612694.pdf
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765757019.pdf
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765757867.pdf
+³   ³       GEN_Beginning_Resume.pdf_1765757462.pdf
+³   ³       image.png_1767573051.png
+³   ³       image_1.png_1767573049.png
+³   ³       
+³   ÃÄÄÄuser_5955d900-be33-4cc2-a8ba-699f064560c0
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765587939.pdf
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765588401.pdf
+³   ³       
+³   ÃÄÄÄuser_5bb475b8-01d1-4180-9d15-165ec2811dfb
+³   ³       image.png_1767663814.png
+³   ³       image_1.png_1767663812.png
+³   ³       
+³   ÃÄÄÄuser_7a08beb2-3b8d-47b0-b81c-0f8a1f347efa
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765591439.pdf
+³   ³       GEN_Beginning_Resume.pdf_1765592119.pdf
+³   ³       
+³   ÃÄÄÄuser_7dc44c07-a6d5-4d55-87e8-d84e94c417db
+³   ³       Black_and_White_Simple_Business_School_Graduate_Corporate_Resume_2.pdf_1767743512.pdf
+³   ³       GEN_Beginning_Resume.docx_1767663976.docx
+³   ³       image.png_1767663630.png
+³   ³       image_1.png_1767663629.png
+³   ³       image_1.png_1767664446.png
+³   ³       
+³   ÀÄÄÄuser_f3060bad-b5d6-4bab-a228-b1d5ac4b10ef
+³           Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765588623.pdf
+³           Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765588700.pdf
+³           Black_and_White_Simple_Business_School_Graduate_Corporate_Resume.pdf_1765588788.pdf
+³           
+ÃÄÄÄuploads
+³   ÀÄÄÄresumes
+ÃÄÄÄurls
+³   ³   jssssssson.json
+³   ³   resume_api.py
+³   ³   routes.py
+³   ³   save_to_database.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           resume_api.cpython-313.pyc
+³           routes.cpython-313.pyc
+³           save_to_database.cpython-313.pyc
+³           
+ÃÄÄÄutils
+³   ³   otp_implementation.py
+³   ³   timepass.html
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           otp_implementation.cpython-313.pyc
+³           
+ÀÄÄÄ__pycache__
+ * Debugger is active!
+ * Debugger PIN: 991-077-863
+
+(env) D:\practice\project>dir
+ Volume in drive D is New Volume
+ Volume Serial Number is 8CB1-BB1E
+
+ Directory of D:\practice\project
+
+12-01-2026  12:16    <DIR>          .
+12-01-2026  12:16    <DIR>          ..
+12-01-2026  11:18               999 .env
+01-12-2025  13:00                20 .gitignore
+12-01-2026  12:11             3,104 app.py
+05-01-2026  11:21    <DIR>          auth
+13-12-2025  15:34               430 client_secret_691713226166-9vn05br9fs6acbg5kjv48ilvofcla6gs.apps.googleusercontent.com.json
+06-01-2026  10:53               653 config.py
+05-01-2026  11:21    <DIR>          database
+05-01-2026  11:21    <DIR>          database_models
+05-01-2026  11:21    <DIR>          delete
+15-12-2025  15:27    <DIR>          env
+09-01-2026  17:16    <DIR>          extension
+13-12-2025  17:38                72 extensions.py
+26-11-2025  12:55               133 init_database.py
+12-01-2026  11:46    <DIR>          instance
+01-12-2025  13:20               243 migrate_database.py
+15-12-2025  15:27    <DIR>          migrations
+07-01-2026  12:27    <DIR>          models
+05-01-2026  11:21    <DIR>          parsers
+09-01-2026  16:40                28 README.md
+05-12-2025  18:24             5,981 requirements.txt
+12-01-2026  12:10    <DIR>          security
+12-01-2026  12:15           392,904 str.txt
+07-01-2026  15:06    <DIR>          templates
+12-01-2026  11:43    <DIR>          upload
+15-12-2025  15:27    <DIR>          uploads
+07-01-2026  11:43    <DIR>          urls
+07-01-2026  19:18    <DIR>          utils
+09-01-2026  17:21    <DIR>          __pycache__
+              11 File(s)        404,567 bytes
+              19 Dir(s)  484,297,170,944 bytes free
+
+        

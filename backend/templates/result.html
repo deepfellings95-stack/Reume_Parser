@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Parsing Result{% endblock %}
+
+{% block content %}
+<div class="sm:w-sm md:w-md max-w-3xl mx-auto mt-16 break-all">
+    <!-- Title -->
+	<div class="sm:grid grid-cols-3 gap-4">
+		<div></div>
+		<h2 class="text-3xl font-bold my-auto text-center text-gray-700 mb-4">Parsing Result</h2>
+		<div class="sm:my-auto hidden sm:block">
+			<a href="{{ url_for('home') }}"
+			   class="neu-btn px-2 relative left-14 py-3 text-gray-700">
+			   ← Back to Upload
+			</a>
+		</div>
+	</div>
+	<div class="flex justify-center block sm:hidden">
+		<a href="{{ url_for('home') }}"
+		   class="neu-btn px-4 py-2 text-gray-700">
+		   ← Back 
+		</a>
+	</div>
+  <!-- Card Container -->
+  
+  {% if texts %}
+	  {% for text in texts %}
+		  <div class="space-y-6">
+			  <div class="p-8 space-y-6">
+
+
+
+				<!-- File Info -->
+				<div class=" p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+					<p class="text-gray-700 font-medium">
+						<strong>File:</strong> {{ filenames[loop.index0] }}
+					</p>
+				</div>
+
+				<!-- Extracted Text Section -->
+				<div>
+					<h3 class="text-xl font-semibold text-gray-700 mb-2">Extracted Text</h3>
+					<div class="neu-card p-6 bg-gray-100 overflow-auto text-sm text-gray-800 leading-relaxed">
+						{% if resume %}
+							<pre class="whitespace-pre-wrap">
+								<p>{{ json }}</p>
+								<ul >
+								  <li><b class="text-blue-500">ID</b> = {{ resume.id }}</li>
+								  <li><b class="text-blue-500">NAME</b> = {{ resume.name }}</li>
+								  <li><b class="text-blue-500">EMAIL</b> = {{ resume.email }}</li>
+								  <li><b class="text-blue-500">PHONE</b> = {{ resume.phone }}</li>
+								  <li><b class="text-blue-500">SKILLS</b> = {{ resume.skillset }}</li>
+								  <li><b class="text-blue-500">EDUCATION</b> = {{ resume.education }}</li>
+								  <li><b class="text-blue-500">EXPERIENCE</b> = {{ resume.experience }}</li>
+								</ul>
+							</pre>
+						{% else %}
+						<pre class="whitespace-pre-wrap">{{ text }}</pre>
+						{% endif %}
+					</div>
+				</div>
+
+				<!-- JSON/Structured Result Section -->
+
+
+				<!-- Back Button -->
+				<div class="mt-6 flex justify-center">
+					<a href="{{ url_for('home') }}"
+					   class="neu-btn px-6 py-3 text-gray-700 font-semibold">
+					   ← Back to Upload
+					</a>
+				</div>
+
+			  </div>
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock %}
+

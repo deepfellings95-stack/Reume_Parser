@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="px-14 ">
+{% if user %}
+	<table class="table-fixed">
+	  <thead>
+		<tr>
+		  <th>id</th>
+		  <th>name</th>
+		  <th>gmail name</th>
+		  <th>email</th>
+		  <th>gmail email</th>
+		  <th>gmail id</th>
+		  <th>password</th>
+		  <th>putpose</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		{% for u in user %}
+		<tr>
+		  <td>{{ u.id }}</td>
+		  <td>{{ u.name }}</td>
+		  <td>{{ u.gmail_name }}</td>
+		  <td>{{ u.email }}</td>
+		  <td>{{ u.gmail_email }}</td>
+		  <td>{{ u.gmail_id  }}</td>
+		  <td>{{ u.password }}</td>
+		  <td>{{ u.purpose }}</td>
+		</tr>
+		{% endfor %} 
+	  </tbody>
+	</table>
+{% endif %} 
+<hr>
+{% if userdetails %}
+	<table class="table-fixed">
+	  <thead>
+		<tr>
+		  <th>user_id</th>
+		  <th>C_name</th>
+		  <th>C_mail</th>
+		  <th>strength</th>
+		  <th>sector</th>
+		  <th>others</th>
+		  <th>U_name</th>
+		  <th>U_mail</th>
+		  <th>city</th>
+		  <th>provine</th>
+		  <th>P_num</th>
+		  <th>P_city</th>
+		  <th>P_state</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		{% for us in userdetails %}
+		<tr>
+		  <td>{{ us.user_id }}</td>
+		  <td>{{ us.company_name }}</td>
+		  <td>{{ us.company_mail }}</td>
+		  <td>{{ us.employee_count }}</td>
+		  <td>{{ us.sector }}</td>
+		  <td>{{ us.others }}</td>
+		  <td>{{ us.university_name }}</td>
+		  <td>{{ us.university_mail }}</td>
+		  <td>{{ us.city }}</td>
+		  <td>{{ us.provine[:10] }}</td>
+		  <td>{{ us.personal_number }}</td>
+		  <td>{{ us.personal_city[:10] }}</td>
+		  <td>{{ us.personal_state[:10] }}</td>
+		</tr>
+		{% endfor %} 
+	  </tbody>
+	</table>
+{% endif %} 
+<hr>
+{% if post %}
+	<table class="table-fixed">
+	  <thead>
+		<tr>
+		  <th>id</th>
+		  <th>filename</th>
+		  <th>filepath</th>
+		  <th >text</th>
+		  <th>json Name</th>
+		  <th>ocr_engine</th>
+		  <th>status</th>
+		  <th>is_deleted</th>
+		  <th>created_at</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		{% for us in post %}
+		<tr>
+		  <td>{{ us.id }}</td>
+		  <td>{{ us.filename }}</td>
+		  <td>{{ us.filepath[:5] }}</td>
+		  {% if us.text %}
+		  <td class="max-w-sm">{{ us.text[:10] }}</td>
+		  {% else %}
+		  <td class="max-w-sm">{{ us.text}}</td>
+		  {% endif %}
+		  <td>{{ us.resume_json[0] }}</td>
+		  <td>{{ us.ocr_engine }}</td>
+		  <td>{{ us.status }}</td>
+		  <td>{{ us.is_deleted }}</td>
+		  <td>{{ us.created_at }}</td>
+		</tr>
+		{% endfor %} 
+	  </tbody>
+	</table>
+{% endif %} 
+<hr>
+{% if resumedetails %}
+	<table class="table-fixed">
+	  <thead>
+		<tr>
+		  <th>id</th>
+		  <th>name</th>
+		  <th>email</th>
+		  <th >phone</th>
+		  <th>skills</th>
+		  <th>education</th>
+		  <th>experience</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		{% for us in resumedetails %}
+		<tr>
+		  <td>{{ us.id }}</td>
+		  <td>{{ us.name }}</td>
+		  <td>{{ us.email }}</td>
+		  <td>{{ us.phone }}</td>
+		  <td>{{ us.skills }}</td>
+		  <td>{{ us.education }}</td>
+		  <td>{{ us.experience[0] }}</td>
+		</tr>
+		{% endfor %} 
+	  </tbody>
+	</table>
+</div>
+{% endif %}
+{% endblock %}
