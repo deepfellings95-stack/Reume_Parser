@@ -183,22 +183,22 @@ def generate_result(id, model):
       
     
     if check_data(resume_json):
-        resume_details.name = resume_json.get('name')
-        resume_details.email = resume_json.get('email')
-        resume_details.phone = str(resume_json.get('phone'))
-        resume_details.skillset = resume_json.get('skills')
-        resume_details.education = resume_json.get('education')
-        resume_details.experience = resume_json.get('experience')
+        resume_details.name = resume_json.get('name') or "Failed"
+        resume_details.email = resume_json.get('email') or "Failed"
+        resume_details.phone = str(resume_json.get('phone')) or "Failed"
+        resume_details.skillset = resume_json.get('skills') or "Failed"
+        resume_details.education = resume_json.get('education') or "Failed"
+        resume_details.experience = resume_json.get('experience') or "Failed"
         resume_details.status = 'Failed'
         
     try:
         
-        resume_details.name = resume_json.get('name')
-        resume_details.email = resume_json.get('email')
-        resume_details.phone = str(resume_json.get('phone'))
-        resume_details.skillset = resume_json.get('skills')
-        resume_details.education = resume_json.get('education')
-        resume_details.experience = resume_json.get('experience')
+        resume_details.name = resume_json.get('name') or "Failed"
+        resume_details.email = resume_json.get('email') or "Failed"
+        resume_details.phone = str(resume_json.get('phone')) or "Failed"
+        resume_details.skillset = resume_json.get('skills') or "Failed"
+        resume_details.education = resume_json.get('education') or "Failed"
+        resume_details.experience = resume_json.get('experience') or "Failed"
         resume_details.status = 'completed'
     except Exception as e:
         print('inside except')

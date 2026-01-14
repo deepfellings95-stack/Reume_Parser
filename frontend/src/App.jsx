@@ -1,12 +1,26 @@
-import { Routes, Route, Navigate } from "react-router-dom"
-import Dashboard from "./pages/Dashboard"
+import { useState, useEffect } from 'react'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Home from './pages/home.jsx'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+import SignupModal from './components/signup.jsx'
+
 
 function App() {
+	const [isSignupOpen, setIsSignupOpen] = useState(false)
+	
   return (
-    <Routes>
-      <Route path="http://127.0.0.1:5000/api/dashboard" element={<Navigate to="/dashboard" />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-    </Routes>
+	<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<Home  setIsSignupOpen={setIsSignupOpen} />}/>
+		</Routes>
+		<SignupModal
+			isOpen={isSignupOpen}
+			onClose={() => setIsSignupOpen(false)}
+			/>
+	</BrowserRouter>
+
   )
 }
 
