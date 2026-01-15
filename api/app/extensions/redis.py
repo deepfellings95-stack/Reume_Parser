@@ -1,10 +1,12 @@
 import redis
 import os
+from dotenv import load_dotenv
 
-redis_client = redis.redis(
+load_dotenv()
+redis_client = redis.Redis(
 	host=os.getenv('REDIS_HOST'),
-    port=os.getenvi(int('REDIS_PORT')),
+    port=int(os.getenv('REDIS_PORT2')),
     password=os.getenv('REDIS_PASSWORD'),
     username=os.getenv('REDIS_USERNAME'),
-    decode_response=True
+    decode_responses=True
 )

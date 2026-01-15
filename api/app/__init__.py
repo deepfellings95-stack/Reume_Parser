@@ -6,6 +6,7 @@ from app.extensions.database import db
 from flask_migrate import Migrate
 from pathlib import Path
 from app.config import config
+from app.routes.auth import auth_bp
 
 
 def create_app(config_name=None):
@@ -24,8 +25,8 @@ def create_app(config_name=None):
         
     app.config.from_object(config[config_name])
     
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
 
-    
     migrate = Migrate()
     db.init_app(app)
     migrate.init_app(app, db)
