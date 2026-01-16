@@ -4,7 +4,7 @@ import UserData from './userData.jsx'
 import OtpStep from './otpStep.jsx'
 
 
-const SignupModal = ({ isOpen, onClose }) => {
+const SignupModal = ({ isOpen, onClose, onSuccess }) => {
 	const [step, setStep] = useState('EMAIL')
   const [formData, setFormData] = useState({})
 
@@ -34,14 +34,15 @@ const SignupModal = ({ isOpen, onClose }) => {
 			<UserData formData = {formData}
 			setFormData = {setFormData}
 			onNext = {() => setStep('OTP')}
-			onBack = {() => setStep('USERDATA')}
+			onBack = {() => setStep('EMAIL')}
 			/>
 		)		
 		}
 				{step === "OTP" && (
 			<OtpStep formData = {formData}
-			onNext = {() => setStep('UserData')}
-			onBack = {() => setStep('OTP')}
+			done = {onSuccess}
+			onPrevious = {() => setStep('USERDATA')}
+			onBack = {() => setStep('EMAIL')}
 			/>
 		)}
 		

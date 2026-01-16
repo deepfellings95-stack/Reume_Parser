@@ -3,6 +3,9 @@ from flask_login import current_user, LoginManager, login_required
 from flask_cors import CORS
 import os
 from app.extensions.database import db
+from app.models.models import Users
+from flask_login import login_required
+import uuid
 from flask_migrate import Migrate
 from pathlib import Path
 from app.config import config
@@ -18,7 +21,11 @@ def create_app(config_name=None):
     
     
     
-    CORS(app)
+    CORS(
+        app,
+        supports_credentials=True,
+        origins=["http://localhost:5173"]
+    )
     
     if config_name is None:
         config_name = os.getenv('CONFIG_NAME','development')
@@ -37,20 +44,22 @@ def create_app(config_name=None):
 
     
     @login_manager.user_loader
-    def load_user():
-        pass
-
-    
-    @app.route('/api', methods=['GET','POST'])
-    def home():
-        
+    def load_user(user_id):
         try:
-            if current_user.is_authenticated:
-                return jsonify({'status':"success","message":"User is authenticated"})
-            else:
-                return jsonify({'status':"success","message":"User is Not authenticated"})
-        except Exception as err:        
-            return jsonify({"status": "success", "message": f"There is error {err}"})
+            return Users.query.get(uuid.UUID(user_id)).first()
+        except Exception as e:
+            return None
+
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        return jsonify({
+            "success": False,
+            "message": "User is not authenticated"
+        }), 401
+    @app.route('/api', methods=['GET','POST'])
+    @login_required
+    def home():       
+        return jsonify({"status": True, "message": current_user.id})
     
     return app
     

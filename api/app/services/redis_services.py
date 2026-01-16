@@ -37,7 +37,7 @@ def redis_verify_otp(redis, email, user_otp):
     if not stored:
         return False ,"OTP Expired"
         
-        attempts = int(redis.get(_attempts_key(email)) or 0)
+    attempts = int(redis.get(_attempts_key(email)) or 0)
     if attempts >= MAX_ATTEMPTS:
         return False, "Too many attempts"
 

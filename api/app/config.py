@@ -8,6 +8,8 @@ class BaseConfig:
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = "uploads"
+    SESSION_COOKIE_SAMESITE = "Lax"
+    SESSION_COOKIE_HTTPONLY = True
     
     SECRET_KEY=os.getenv('FLASK_SECRET_KEY',"fdkjhkfghirdfe435jkh")
     

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import BaseLayout from './base.jsx';
 
-function Home({setIsSignupOpen}) {
+function Home({setIsSignupOpen, setIsLoginOpen}) {
   // const [inputValue, setInputValue] = useState('');
   // const [result, setResult] = useState(null);
 
@@ -22,14 +22,16 @@ function Home({setIsSignupOpen}) {
   const [message, setMessage] = useState(null)
   
   useEffect(() => {
-	  fetch('/api')
+	  fetch('/api', {
+    credentials: 'include' // ⭐ REQUIRED
+  })
 	  .then(res => res.json())
 	  .then(data => setMessage(data.message))
   }, []
   )
 
   return (
-  <BaseLayout setIsSignupOpen={setIsSignupOpen}>
+  <BaseLayout setIsSignupOpen={setIsSignupOpen}  setIsLoginOpen={setIsLoginOpen}>
     <div style={{ padding: '20px', textAlign: 'center' }}>
       <h1>{message}</h1>
       

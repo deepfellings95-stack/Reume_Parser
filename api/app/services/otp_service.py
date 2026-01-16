@@ -1,4 +1,4 @@
-from app.services.redis_services import generate_otp, save_otp, redis_verify_otp, can_resend
+from app.services.ttlServices import generate_otp, save_otp, redis_verify_otp, can_resend
 from flask import Blueprint, jsonify
 from app.models.models import Users
 from app.extensions.redis import redis_client
@@ -39,21 +39,37 @@ def send_email_brevo(email, otp):
     
 def request_otp(email):
     if not email:
-        return jsonify({'success':False, 'message':"email does not exist"}), 400
+        return False,"email does not exist", 400
         
     user = Users.query.filter_by(email = email).first()
     if user:
-        return jsonify({"success":False, 'message':"User already exist, did you forget password"}), 409
+        return False, "User already exist, did you forget password", 409
     
     otp = generate_otp()
     save_otp(redis_client, email, otp)
     
-    success = send_email_brevo(email, otp)
+    success = True
+    print(otp)
     
     if success:
-        return jsonify({'success': True, 'message':"OTP sent to email"}), 200
+        return  True,"OTP sent to email", 200
        
        
     else: 
-        return jsonify({'success':False, 'message':'Failed to send Otp, internal server error'}), 500
-    
+        return False, 'Failed to send Otp, internal server error', 500
+
+def verify_otp(email, otp):
+    if not email or otp is None:
+        return False ," Email Not Provided and invalid OTP"
+        
+    try:
+        success, message = redis_verify_otp(redis_client, email, otp)
+        if success:
+
+            return True, message, 200
+            
+        else:
+            return False, message, 400
+        
+    except Exception as e:
+        return False, f"error: {e}", 500
