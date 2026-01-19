@@ -1,7 +1,7 @@
 from flask import Blueprint, request, current_app, jsonify
 from app.models.models import Users
 from app.services.set_users import set_user
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 from app.services.otp_service import request_otp, verify_otp
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
@@ -90,3 +90,9 @@ def otp_verification():
         return jsonify({'success':False, 'message':msg}), res
     print(message)    
     return jsonify({'success':False ,'message':message}), status
+    
+    
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    logout_user()
+    return 'Logged out', 200

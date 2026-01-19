@@ -46,7 +46,7 @@ def create_app(config_name=None):
     @login_manager.user_loader
     def load_user(user_id):
         try:
-            return Users.query.get(uuid.UUID(user_id)).first()
+            return Users.query.get(uuid.UUID(user_id))
         except Exception as e:
             return None
 
@@ -55,11 +55,13 @@ def create_app(config_name=None):
         return jsonify({
             "success": False,
             "message": "User is not authenticated"
-        }), 401
+        }), 401       
+        
+        
     @app.route('/api', methods=['GET','POST'])
     @login_required
     def home():       
-        return jsonify({"status": True, "message": current_user.id})
+        return jsonify({"status": True, "message": current_user.name})
     
     return app
     
